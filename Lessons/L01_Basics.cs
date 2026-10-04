@@ -2,6 +2,7 @@ namespace CSharpLearningProject.Lessons
 {
     /// <summary>
     /// 模块 01: 基础语法
+    /// ### wcq add
     /// 知识点: 变量声明、数据类型、类型转换、运算符、var、常量
     /// </summary>
     public static class L01_Basics
