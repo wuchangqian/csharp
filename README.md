@@ -2,14 +2,67 @@
 
 我和 wxy 学 C# 的项目。
 
+本项目是一个基于 **Avalonia UI** 的跨平台 .NET 桌面 GUI 应用，采用 MVVM 模式，内置 17 个渐进式 C# 课程模块（基础 → 高级）外加一个综合"图书管理系统"演示。应用界面为深色主题：左侧菜单列出 18 个按钮（1-17 课 + 综合演示 0），右侧输出面板显示运行结果。点击菜单后，对应模块的 `Console.WriteLine` 输出会被拦截并重定向到 GUI 文本框。
+
+## 技术栈
+
+| 项 | 内容 |
+|---|---|
+| 语言 | C# 10.0+ |
+| 框架 | Avalonia UI 12.1.3（跨平台 .NET GUI） |
+| MVVM | CommunityToolkit.Mvvm 8.4.2（源生成器 `[ObservableProperty]` / `[RelayCommand]`） |
+| 目标框架 | `net10.0`，`WinExe` 输出 |
+| 主题 | FluentTheme，深色（`RequestedThemeVariant="Dark"`） |
+
+### NuGet 依赖
+
+- `Avalonia` 12.1.3
+- `Avalonia.Desktop` 12.1.3
+- `Avalonia.Themes.Fluent` 12.1.3
+- `Avalonia.Fonts.Inter` 12.1.3
+- `AvaloniaUI.DiagnosticsSupport` 2.2.3（仅 Debug）
+- `CommunityToolkit.Mvvm` 8.4.2
+
+无 `.sln` 文件，单项目仓库。
+
 ## 运行方式
 
+### 前置要求
+
+需安装 **.NET 10 SDK**（10.0.401+）。检查版本：
+
 ```bash
-cd CSharpLearningProject
+dotnet --version
+```
+
+### 方式一：命令行运行（最简单）
+
+```bash
+cd d:\git\csharp
 dotnet run
 ```
 
-或用 VSCode 打开项目文件夹, 按 F5 调试运行。
+首次运行会自动还原 NuGet 包，然后启动 GUI 窗口。
+
+### 方式二：仅构建
+
+```bash
+dotnet build d:\git\csharp
+```
+
+构建产物位于 `bin/Debug/net10.0/CSharpLearningProject.dll`。
+
+### 方式三：VSCode 调试
+
+用 VSCode 打开项目文件夹，按 **F5**。`.vscode/launch.json` 启动 DLL，`tasks.json` 的 `build` 任务作为预启动任务。
+
+## 使用方法
+
+启动后弹出 1000×650 的深色窗口：
+
+1. 左侧菜单点击任意编号按钮（1-17 为课程，0 为综合图书管理演示）
+2. 右侧查看该模块的控制台输出
+3. 顶部"清空输出"按钮重置面板
 
 ## 项目结构
 
@@ -21,6 +74,8 @@ CSharpLearningProject/
 ├── Styles.axaml                  # 菜单按钮样式
 ├── ViewLocator.cs                # MVVM View-ViewModel 映射
 ├── OutputWriter.cs               # Console 输出重定向到 GUI
+├── CSharpLearningProject.csproj  # 项目文件 (net10.0, WinExe)
+├── app.manifest                  # Windows 应用清单
 │
 ├── Lessons/                      # 17 个学习模块
 │   ├── L01_Basics.cs             # 01: 基础语法 (变量/类型/运算符)
@@ -90,6 +145,19 @@ CSharpLearningProject/
 └───────────────────────────────────────────┘
 ```
 
+## 启动流程
+
+1. `Program.Main` → `AppBuilder.Configure<App>()` → 桌面生命周期
+2. `App.OnFrameworkInitializationCompleted` 创建 `MainWindow`，`DataContext = new MainViewModel()`
+3. `ViewLocator` 约定映射：`MainViewModel` → `MainWindow`（类型名中 "ViewModel" 替换为 "View"）
+
+## 核心执行机制
+
+- **模块注册表**：`MainViewModel` 持有 `(string Id, string Name, Action Run)[] _modules` 数组，共 18 项（L01-L17 + 综合演示 "0"）。新增模块只需加一行
+- **执行流程**：`RunModuleCommand` 清空输出 → `Console.SetOut(new OutputWriter(...))` → `Task.Run` 跑模块（不阻塞 UI）→ `finally` 恢复 `Console.Out`
+- **输出重定向**：`OutputWriter`（`StringWriter` 子类）将写入累积到缓冲，通过 `Action<string>` 回调 → `Dispatcher.UIThread.Post` → `OutputText` 绑定属性
+- **Library 演示**：工厂创建条目 → 策略模式搜索 → 借还事件 → LINQ 统计 → JSON 持久化到 `%TEMP%/CSharpLearning/library_data.json`
+
 ## 设计原则
 
 1. 每个类一个文件: Library/ 下 11 个文件, 每个文件只负责一个类型
@@ -97,6 +165,15 @@ CSharpLearningProject/
 3. Console 输出重定向: OutputWriter 拦截 Console.WriteLine, 转发到 GUI
 4. 异步执行: 模块在 Task.Run 中执行, 不阻塞 UI
 5. 命名空间隔离: Lessons 和 Library 分开, 避免同名类型冲突
+
+## 配置说明
+
+- 无需 `appsettings.json` 或其他运行时配置文件，应用自包含
+- 无环境变量、密钥或外部服务依赖
+- `App.axaml` 硬编码 `RequestedThemeVariant="Dark"`
+- `app.manifest` 声明 Windows 10 兼容性（其他平台无影响）
+- `.gitignore` 排除 `bin/`、`obj/`、`*.txt`
+- 唯一文件系统副作用：运行模块 0 时向临时目录写入 JSON 数据文件
 
 ## 知识点覆盖
 
@@ -113,3 +190,7 @@ CSharpLearningProject/
 2. 按模块 01→17 顺序学习, 每个模块读代码 + 运行
 3. 阅读 Library/ 下的综合应用代码, 理解各知识点如何整合
 4. 尝试修改代码: 比如添加新的馆藏类型、新的搜索策略
+
+## 备注
+
+`学习指南.md` 描述的是更早的 CLI 菜单版本（提到文本菜单和 `Program.cs` 作为"菜单入口"），当前代码已是 Avalonia GUI 版本。本文档为最新，反映 GUI 架构；学习指南中的"知识点对照表"仍准确，可作为每课知识点的参考。
