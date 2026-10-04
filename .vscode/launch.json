@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "运行 C# 学习项目 (调试)",
+            "name": "运行 GUI (调试)",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
@@ -10,19 +10,7 @@
             "args": [],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
-            "console": "integratedTerminal",
-            "internalConsoleOptions": "openOnSessionStart"
-        },
-        {
-            "name": "运行 C# 学习项目 (不调试)",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build",
-            "program": "${workspaceFolder}/bin/Debug/net10.0/CSharpLearningProject.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}",
-            "stopAtEntry": false,
-            "console": "integratedTerminal"
+            "console": "internalConsole"
         }
     ]
 }
