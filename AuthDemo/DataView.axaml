@@ -1,0 +1,75 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:CSharpLearningProject.AuthDemo"
+        x:Class="CSharpLearningProject.AuthDemo.DataView"
+        x:DataType="vm:DataViewModel"
+        Title="学习资源 —— 已登录 (SQLite)"
+        Width="900" Height="600"
+        WindowStartupLocation="CenterScreen"
+        Background="#1a1a2e">
+
+    <Grid ColumnDefinitions="280,*">
+
+        <!-- 左侧: 分类树 -->
+        <Border Grid.Column="0" Background="#1e1e2e" Padding="8">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top"
+                           Text="分类"
+                           Foreground="#aaa"
+                           FontSize="12"
+                           FontWeight="SemiBold"
+                           Margin="8,4,0,8"/>
+                <TreeView ItemsSource="{Binding Roots}"
+                          SelectedItem="{Binding SelectedNode, Mode=TwoWay}">
+                    <TreeView.ItemTemplate>
+                        <TreeDataTemplate ItemsSource="{Binding Children}">
+                            <TextBlock Text="{Binding Category.Name}" Foreground="#e0e0e0"/>
+                        </TreeDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+            </DockPanel>
+        </Border>
+
+        <!-- 右侧: 知识点列表 -->
+        <Border Grid.Column="1" Padding="12">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top"
+                           Text="{Binding SelectedNode.Category.Name, StringFormat='分类: {0}'}"
+                           Foreground="white"
+                           FontSize="16"
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,12"/>
+                <ListBox ItemsSource="{Binding Items}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="*,180,80" Margin="0,4">
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="{Binding Title}"
+                                               Foreground="white"
+                                               FontSize="14"
+                                               FontWeight="SemiBold"/>
+                                    <TextBlock Text="{Binding Description}"
+                                               Foreground="#888"
+                                               FontSize="12"
+                                               TextWrapping="Wrap"/>
+                                </StackPanel>
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding Difficulty}"
+                                           Foreground="#6ab0ff"
+                                           FontSize="12"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="2"
+                                           Text="{Binding Id, StringFormat='#{0}'}"
+                                           Foreground="#555"
+                                           FontSize="12"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Right"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+        </Border>
+
+    </Grid>
+</Window>
