@@ -1,0 +1,182 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:CSharpLearningProject.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="650"
+        x:Class="CSharpLearningProject.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Title="C# 学习项目 —— 图书馆管理系统 (Avalonia GUI)"
+        Width="1000" Height="650"
+        WindowStartupLocation="CenterScreen">
+
+    <Design.DataContext>
+        <vm:MainViewModel />
+    </Design.DataContext>
+
+    <!-- 整体网格: 左侧菜单 240px + 右侧内容 -->
+    <Grid ColumnDefinitions="240,*">
+
+        <!-- ==================== 左侧菜单 ==================== -->
+        <Border Grid.Column="0" Background="#1e1e2e">
+            <DockPanel>
+                <!-- 标题 -->
+                <Border DockPanel.Dock="Top" Padding="16,12">
+                    <TextBlock Text="C# 学习项目"
+                               Foreground="white"
+                               FontSize="18"
+                               FontWeight="Bold"/>
+                </Border>
+                <Border DockPanel.Dock="Top" Padding="16,0,16,8">
+                    <TextBlock Text="图书馆管理系统"
+                               Foreground="#888"
+                               FontSize="12"/>
+                </Border>
+                <Border DockPanel.Dock="Top" Height="1" Background="#333"/>
+
+                <!-- 菜单列表 (可滚动) -->
+                <ScrollViewer>
+                    <StackPanel Spacing="0" Margin="0,8">
+                        <TextBlock Text="基础语法"
+                                   Foreground="#aaa"
+                                   FontSize="11"
+                                       FontWeight="SemiBold"
+                                   Margin="16,8,0,4"/>
+                        <Button Content="1. 变量与数据类型"
+                                Command="{Binding RunModuleCommand}"
+                                CommandParameter="1"
+                                Classes="menuItem"/>
+                        <Button Content="2. 控制流"
+                                Command="{Binding RunModuleCommand}"
+                                CommandParameter="2"
+                                Classes="menuItem"/>
+                        <Button Content="3. 方法与参数"
+                                Command="{Binding RunModuleCommand}"
+                                CommandParameter="3"
+                                Classes="menuItem"/>
+                        <Button Content="4. 数组"
+                                Command="{Binding RunModuleCommand}"
+                                CommandParameter="4"
+                                Classes="menuItem"/>
+                        <Button Content="5. 字符串"
+                                Command="{Binding RunModuleCommand}"
+                                CommandParameter="5"
+                                Classes="menuItem"/>
+                        <Button Content="6. 集合"
+                                Command="{Binding RunModuleCommand}"
+                                CommandParameter="6"
+                                Classes="menuItem"/>
+
+                        <TextBlock Text="面向对象"
+                                   Foreground="#aaa"
+                                   FontSize="11"
+                                       FontWeight="SemiBold"
+                                   Margin="16,8,0,4"/>
+                        <Button Content="7. 类与对象 (封装)"
+                                Command="{Binding RunModuleCommand}"
+                                CommandParameter="7"
+                                Classes="menuItem"/>
+                        <Button Content="8. 继承"
+                                Command="{Binding RunModuleCommand}"
+                                CommandParameter="8"
+                                Classes="menuItem"/>
+                        <Button Content="9. 多态/抽象/接口"
+                                Command="{Binding RunModuleCommand}"
+                                CommandParameter="9"
+                                Classes="menuItem"/>
+                        <Button Content="10. 委托与事件"
+                                Command="{Binding RunModuleCommand}"
+                                CommandParameter="10"
+                                Classes="menuItem"/>
+                        <Button Content="11. 泛型"
+                                Command="{Binding RunModuleCommand}"
+                                CommandParameter="11"
+                                Classes="menuItem"/>
+                        <Button Content="12. LINQ"
+                                Command="{Binding RunModuleCommand}"
+                                CommandParameter="12"
+                                Classes="menuItem"/>
+
+                        <TextBlock Text="进阶"
+                                   Foreground="#aaa"
+                                   FontSize="11"
+                                       FontWeight="SemiBold"
+                                   Margin="16,8,0,4"/>
+                        <Button Content="13. 异步编程"
+                                Command="{Binding RunModuleCommand}"
+                                CommandParameter="13"
+                                Classes="menuItem"/>
+                        <Button Content="14. 异常处理"
+                                Command="{Binding RunModuleCommand}"
+                                CommandParameter="14"
+                                Classes="menuItem"/>
+                        <Button Content="15. 文件 I/O"
+                                Command="{Binding RunModuleCommand}"
+                                CommandParameter="15"
+                                Classes="menuItem"/>
+                        <Button Content="16. 高级类型"
+                                Command="{Binding RunModuleCommand}"
+                                CommandParameter="16"
+                                Classes="menuItem"/>
+                        <Button Content="17. 特性与反射"
+                                Command="{Binding RunModuleCommand}"
+                                CommandParameter="17"
+                                Classes="menuItem"/>
+
+                        <TextBlock Text="综合应用"
+                                   Foreground="#aaa"
+                                   FontSize="11"
+                                       FontWeight="SemiBold"
+                                   Margin="16,8,0,4"/>
+                        <Button Content="0. 图书馆管理系统"
+                                Command="{Binding RunModuleCommand}"
+                                CommandParameter="0"
+                                Classes="menuItem"
+                                FontWeight="SemiBold"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+
+        <!-- ==================== 右侧内容 ==================== -->
+        <Grid Grid.Column="1" RowDefinitions="Auto,*" Background="#1a1a2e">
+
+            <!-- 顶部工具栏 -->
+            <Border Grid.Row="0" Padding="12,8" Background="#16213e">
+                <DockPanel>
+                    <TextBlock Text="{Binding CurrentModuleName}"
+                               Foreground="white"
+                               FontSize="16"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center"/>
+                    <Button Content="清空输出"
+                            Command="{Binding ClearCommand}"
+                            DockPanel.Dock="Right"
+                            Margin="8,0,0,0"/>
+                    <TextBlock Text="{Binding StatusText}"
+                               Foreground="#888"
+                               FontSize="12"
+                               DockPanel.Dock="Right"
+                               VerticalAlignment="Center"/>
+                </DockPanel>
+            </Border>
+
+            <!-- 输出区 -->
+            <Border Grid.Row="1" Padding="4">
+                <TextBox Text="{Binding OutputText}"
+                         IsReadOnly="True"
+                         FontFamily="Cascadia Code,Consolas,monospace"
+                         FontSize="13"
+                         AcceptsReturn="True"
+                         TextWrapping="NoWrap"
+                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto"
+                         Background="#0f0f1a"
+                         Foreground="#e0e0e0"
+                         BorderBrush="#333"/>
+            </Border>
+
+        </Grid>
+
+    </Grid>
+</Window>
