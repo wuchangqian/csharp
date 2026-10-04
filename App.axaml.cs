@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using CSharpLearningProject.AuthDemo;
 using CSharpLearningProject.ViewModels;
 using CSharpLearningProject.Views;
 
@@ -17,10 +18,23 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow
+            // 启动闸门: 必须先登录, 成功后才创建主窗口.
+            // 建库 (建表/种子) 同步执行, 确保登录前 users 表存在.
+            Database.Initialize();
+
+            var login = new LoginView(onLoginSuccess: () =>
             {
-                DataContext = new MainViewModel(),
-            };
+                // 登录成功: 切换主窗口为 MainWindow, 然后关闭登录窗.
+                var main = new MainWindow
+                {
+                    DataContext = new MainViewModel(),
+                };
+                desktop.MainWindow = main;
+                main.Show();
+            });
+
+            // 登录窗作为初始主窗口. 登录窗关闭时若主窗口已 Show, 应用不退出.
+            desktop.MainWindow = login;
         }
 
         base.OnFrameworkInitializationCompleted();

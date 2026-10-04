@@ -32,6 +32,24 @@
                                Foreground="#888"
                                FontSize="12"/>
                 </Border>
+
+                <!-- 当前用户 + 修改密码 (左上角) -->
+                <Border DockPanel.Dock="Top" Padding="16,8" Background="#252540">
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="{Binding CurrentUser}"
+                                   Foreground="#bbb"
+                                   FontSize="12"/>
+                        <Button Content="修改密码"
+                                Command="{Binding ChangePasswordCommand}"
+                                FontSize="12"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Center"
+                                Background="#16213e"
+                                Foreground="white"
+                                Padding="8,4"/>
+                    </StackPanel>
+                </Border>
+
                 <Border DockPanel.Dock="Top" Height="1" Background="#333"/>
 
                 <!-- 菜单列表 (可滚动) -->

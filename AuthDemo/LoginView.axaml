@@ -3,15 +3,16 @@
         xmlns:vm="using:CSharpLearningProject.AuthDemo"
         x:Class="CSharpLearningProject.AuthDemo.LoginView"
         x:DataType="vm:LoginViewModel"
-        Title="登录 —— SQLite + bcrypt 验证"
+        Title="登录"
         Width="380" Height="300"
         WindowStartupLocation="CenterScreen"
+        CanResize="False"
         Background="#1a1a2e">
 
     <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" Margin="32,32">
 
         <TextBlock Grid.Row="0"
-                   Text="AuthDemo 登录"
+                   Text="登录"
                    Foreground="white"
                    FontSize="20"
                    FontWeight="SemiBold"

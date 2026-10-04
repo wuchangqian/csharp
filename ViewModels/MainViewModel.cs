@@ -1,5 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -29,6 +31,10 @@ public partial class MainViewModel : ViewModelBase
 
     [ObservableProperty]
     private string _statusText = "就绪";
+
+    // 当前登录用户名 (由 App 登录闸门在构造前写入 AuthSession).
+    [ObservableProperty]
+    private string _currentUser = AuthSession.CurrentUsername;
 
     // ===== 模块注册表 =====
     // 用数组替代 switch, 新增模块只需加一行
@@ -126,5 +132,22 @@ public partial class MainViewModel : ViewModelBase
     {
         ClearOutput();
         StatusText = "就绪";
+    }
+
+    // ===== 命令: 修改密码 (弹模态对话框) =====
+    [RelayCommand]
+    private void ChangePassword()
+    {
+        // 以主窗口为 owner 弹模态对话框, 修改成功后刷新显示的用户名.
+        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+            && desktop.MainWindow is not null)
+        {
+            var dialog = new ChangePasswordView(onSuccess: () =>
+            {
+                // 密码改成功: 同步刷新左上角显示的用户名 (用户名不变, 但保持一致).
+                CurrentUser = AuthSession.CurrentUsername;
+            });
+            dialog.ShowDialog(desktop.MainWindow);
+        }
     }
 }

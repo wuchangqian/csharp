@@ -43,6 +43,10 @@ public partial class LoginViewModel : ViewModelBase
         }
 
         ErrorMessage = "";
+
+        // 登录成功: 记录当前会话用户, 供主界面显示用户名与修改密码使用.
+        AuthSession.Current = UserService.FindByUsername(Username);
+
         _onLoginSuccess.Invoke();
     }
 }
