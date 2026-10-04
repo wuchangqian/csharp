@@ -128,6 +128,10 @@
                                    FontSize="11"
                                        FontWeight="SemiBold"
                                    Margin="16,8,0,4"/>
+                        <Button Content="18. SQLite + 登录验证"
+                                Command="{Binding RunModuleCommand}"
+                                CommandParameter="18"
+                                Classes="menuItem"/>
                         <Button Content="0. 图书馆管理系统"
                                 Command="{Binding RunModuleCommand}"
                                 CommandParameter="0"

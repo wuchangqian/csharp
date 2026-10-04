@@ -1,4 +1,6 @@
 *.txt
 /bin/
 /obj/
+/auth.db
+/auth.db-*
 .vs/

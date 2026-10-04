@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CSharpLearningProject.AuthDemo;
 using CSharpLearningProject.Lessons;
 using CSharpLearningProject.Library;
 
@@ -50,6 +51,7 @@ public partial class MainViewModel : ViewModelBase
         ("15", "模块 15: 文件 I/O",        () => L15_FileIO.Run()),
         ("16", "模块 16: 高级类型",        () => L16_AdvancedTypes.Run()),
         ("17", "模块 17: 特性与反射",      () => L17_Reflection.Run()),
+        ("18", "模块 18: SQLite + 登录验证", () => AuthDemoEntry.Run()),
         ("0",  "综合应用: 图书馆管理系统", () => LibraryDemo.Run()),
     };
 
